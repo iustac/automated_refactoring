@@ -1,0 +1,5 @@
+decorator==4.4.0
+networkx==2.2
+numpy==1.16.4
+redis==2.10.5
+scipy==1.2.2
