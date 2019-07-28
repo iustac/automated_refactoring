@@ -19,7 +19,6 @@ class Graph:
 		low[u] = self.Time
 		self.Time += 1
 		for v in self.graph[u]:
-			print visited
 			if visited[v] == False :
 				parent[v] = u
 				children += 1

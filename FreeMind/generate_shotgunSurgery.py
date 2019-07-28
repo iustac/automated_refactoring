@@ -23,7 +23,6 @@ def generate_shotgunSurgery(classNumber, value, relation, classList, packageList
 			package=item
 			break
 
-	print onlyRelation
 #for shotgun-surgery we want to remove the most related Relations.  
 	for item in onlyRelation:
 		if item[7]>1:

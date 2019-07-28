@@ -24,7 +24,6 @@ def generate_godClass(classNumber, value, relation, classList, packageList, pack
 			package=item
 			break
 
-	print onlyRelation
 #We want all relations
 	for item in onlyRelation:
 		numberOfClassInRel=numberOfClassInRel+1
