@@ -1,5 +1,5 @@
 # Automated refactoring
-Automated refactoring is a refactoring tool that is implemented to find bad smells in java projects like Junit, Jgraph, JAG and FreeMind and also refactor them. You can also refactor any other java code by replacing the input file.
+Automated refactoring is a refactoring tool that is implemented to find bad smells in java projects like Junit, Jgraph, JAG and FreeMind and also to refactor them. You can also refactor any other java code by replacing the input file.
 ## Usage
 ### Installation
 First, you should run ```pip install -r requirements.pip``` to install python dependencies. 
