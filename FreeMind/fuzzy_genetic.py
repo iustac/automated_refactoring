@@ -141,6 +141,7 @@ def fitness(first=False):
     for clas in classes[1:]:
         parametrs = clas.split(' ')
         if len(parametrs) < 2:
+            # print "empty line"
             continue
         analyse_json[parametrs[0]] = {}
         analyse_json[parametrs[0]]['in_degree'] = float(parametrs[4])
@@ -173,23 +174,24 @@ def fitness(first=False):
 
     for id, param in analyse_json.iteritems():
         critical_params = {}
-        if abs(param['in_degree']-in_degree_average) > (0.1*in_degree_average):
+        # critical_params[id] = {}
+        if param['in_degree'] > in_degree_average:
             if id not in critical_params.keys():
                 critical_params[id] = {}
             critical_params[id]['in_degree'] = param['in_degree']
-        if abs(param['out_degree']-out_degree_average) > (0.1*out_degree_average):
+        if param['out_degree'] > out_degree_average:
             if id not in critical_params.keys():
                 critical_params[id] = {}
             critical_params[id]['out_degree'] = param['out_degree']
-        if abs(param['betweeness']-betweeness_average) > (0.1*betweeness_average):
+        if param['betweeness'] > betweeness_average:
             if id not in critical_params.keys():
                 critical_params[id] = {}
             critical_params[id]['betweeness_centrality'] = param['betweeness']
-        if abs(param['load']-load_average) > (0.1*load_average):
+        if param['load'] > load_average:
             if id not in critical_params.keys():
                 critical_params[id] = {}
             critical_params[id]['load_centrality'] = param['load']
-        if abs(param['closeness']-closeness_average) > (0.1*closeness_average):
+        if param['closeness'] > closeness_average:
             if id not in critical_params.keys():
                 critical_params[id] = {}
             critical_params[id]['closeness_centrality'] = param['closeness']
@@ -261,22 +263,23 @@ def fuzzy_genetic(class_id, params):
                 continue
         parents = random.sample(dual_operand, int(0.8*len(dual_operand)))
         for idx in range(len(parents)/2):
-            print 'selected parent', parents[idx] 
             p1 = parents[idx].split('0')
             p2 = parents[idx+len(parents)/2].split('0')
             child1 = p1[0] +'0'+ p2[1]
             child2 = p2[0] +'0'+ p1[1]
             dual_operand.remove(parents[idx])
             dual_operand.remove(parents[idx+len(parents)/2])
+            random_child = random.choice(range(0,2))
+            if random_child == 0:
+                tmp = list(child1)
+                tmp[2] = '1' if tmp[2]=='2' else '2'
+                child1 = ''.join(tmp)
+            else:
+                tmp = list(child2)
+                tmp[2] = '1' if tmp[2]=='2' else '2'
+                child2 = ''.join(tmp)
             dual_operand.append(child1)
             dual_operand.append(child2)
-        individual_mutate = random.sample(dual_operand, int(0.05*len(dual_operand)))
-        for idx in range(len(individual_mutate)):
-            tmp = list(individual_mutate[idx])
-            tmp[2] = '1' if tmp[2]=='2' else '2'
-            mutate_child = ''.join(tmp)
-            dual_operand.append(mutate_child)
-
         generate_fuzzy(dual_operand)
         output0 = {'feature_envy':0.0,
             'shotgun_surgery':0.0,
@@ -300,7 +303,7 @@ def fuzzy_genetic(class_id, params):
                 sec_critical_situation = True
             
             if value > 0:
-                print 'applying refactoring', refactoring, 'for', class_id
+                print('calculatin refactoring result', class_id, refactoring, reverse_defuzzify(value))
                 op.generate(refactoring, class_id, reverse_defuzzify(value), improvment)
                 new_params = fitness(False)
 
@@ -361,7 +364,6 @@ def fuzzy_genetic(class_id, params):
                             if var in rule.split('0')[0]:
                                 dual_operand.remove(rule)
                     except Exception as e:
-                        print 'error',e
                         pass
             i = i + 1
 
@@ -369,10 +371,13 @@ def fuzzy_genetic(class_id, params):
 def main():
     op.generate('start','', '', False)
     initial_values = fitness(first=True)
+    bull = False
     for value in initial_values[2:]:
         
         for class_id, params in value.items():
             print 'class number ', class_id
+
             fuzzy_genetic(class_id, params)
+            
 
 main()
